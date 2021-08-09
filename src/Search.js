@@ -31,10 +31,7 @@ export const LIST_OPTIONS = [
 ];
 
 export const TERMS = [
-  "Android",
-  "Art",
-  "Artificial Intelligence",
-  "Astronomy",
+  "Aquaculture",
   "Austen",
   "Baseball",
   "Basketball",
@@ -109,7 +106,6 @@ export const TERMS = [
   "Ultimate",
   "Virtual Reality",
   "Web Development",
-  "iOS",
 ].map((term) => term.toLowerCase());
 
 class Search extends Component {
