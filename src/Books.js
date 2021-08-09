@@ -63,3 +63,11 @@ class Books extends Component {
       );
     }
   }
+
+  Books.propTypes = {
+    shelf: PropTypes.string.isRequired,
+    BooksList: PropTypes.array.isRequired,
+    updateshelf: PropTypes.func.isRequired,
+  };
+  
+  export default Books;
