@@ -1,34 +1,41 @@
 import React from "react";
-import * as BooksAPI from "./BooksAPI";
 import "./App.css";
-import Shelf from "./Shelf";
-import Books from "./Books";
-import Search, { LIST_OPTIONS } from "./Search";
+
+import * as BooksAPI from "./BooksAPI";
+import BookShelf from "./BookShelf";
+import SearchPage from "./SearchPage"
+
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+
+export const shelves = [
+  {
+    value: "currentlyReading",
+    label: "Currently Reading",
+  },
+  {
+    value: "wantToRead",
+    label: "Want to Read",
+  },
+  {
+    value: "read",
+    label: "Read",
+  },
+  {
+    value: "none",
+    label: "None",
+  },
+];
 
 class BooksApp extends React.Component {
   constructor(props) {
     super(props);
-    this.updateshelf = this.updateshelf.bind(this);
-    this.getAllBooks = this.getAllBooks.bind(this);
-
-    this.state = {
-      /**
-       * TODO: Instead of using this state variable to keep track of which page
-       * we're on, use the URL in the browser's address bar. This will ensure that
-       * users can use the browser's back and forward buttons to navigate between
-       * pages, as well as provide a good URL they can bookmark and share.
-       */
-      Books: [],
-      showSearchPage: false,
-    };
-  }
+    this.state = { 
+      books: [],
+  }};
 
   getAllBooks() {
-    BooksAPI.getAll().then((Books) => {
-      this.setState(() => ({
-        Books,
-      }));
+    BooksAPI.getAll().then((response) => {
+      this.setState({ books: response });
     });
   }
 
@@ -36,77 +43,51 @@ class BooksApp extends React.Component {
     this.getAllBooks();
   }
 
-  updateshelf(book, shelf) {
-    BooksAPI.update(book, shelf).then((Books) => {
-      const updatedBook = { ...book, shelf };
-
-      if (this.state.Books.find((b) => b.id === book.id)) {
-        this.setState((state) => ({
-          Books: state.Books.map((book) =>
-            book.id === updatedBook.id ? updatedBook : book
-          ),
-        }));
-      } else {
-        this.setState((state) => ({
-          Books: [...state.Books, updatedBook],
-        }));
-      }
+  updateShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(() => {
+      this.getAllBooks();
     });
-  }
+  };
 
   render() {
     return (
       <Router>
         <div className="app">
-          <Switch>
-            <Route exact path="/search">
-              <Search
-                showSearchPage={() => {
-                  this.setState({ showSearchPage: false });
-                }}
-                updateshelf={this.updateshelf}
-                booksList={this.state.Books}
-              />
-            </Route>
-
-            <Route exact path="/">
-              <div className="list-books">
-                <div className="list-books-title">
-                  <h1>MyReads</h1>
-                </div>
-                {LIST_OPTIONS.filter((option) => option.toShow).map(
-                  (o, index) => {
+        <Switch>
+          <Route exact path="/search">
+            <SearchPage books={this.state.books} updateShelf={this.updateShelf}/>
+          </Route>
+          <Route exact path="/">
+            <div className="list-books">
+              <div className="list-books-title">
+                <h1>MyReads</h1>
+              </div>
+              <div className="list-books-content">
+                <div>
+                  {shelves.map((shelf) => {
+                    if (shelf.value === "none") {
+                      return "";
+                    }
                     return (
-                      <Shelf
-                        key={index}
-                        title={o.label}
-                        Books={
-                          <Books
-                            shelf={o.value}
-                            BooksList={this.state.Books}
-                            updateshelf={this.updateshelf}
-                          />
-                        }
+                      <BookShelf
+                        key={shelf.value}
+                        shelf={shelf}
+                        updateShelf={this.updateShelf}
+                        books={this.state.books.filter(
+                          (book) => book.shelf === shelf.value
+                        )}
                       />
                     );
-                  }
-                )}
-
-                <div className="open-search">
-                  {
-                    <Link to={"/search"}>
-                      <button
-                        onClick={() => {
-                          this.setState({ showSearchPage: true });
-                        }}
-                      >
-                        Add a book
-                      </button>
-                    </Link>
-                  }
+                  })}
                 </div>
               </div>
-            </Route>
+              <div className="open-search">
+                <Link to="/search">
+                  <button>Add a book</button>
+                </Link>
+              </div>
+            </div>
+          </Route>
           </Switch>
         </div>
       </Router>

@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import * as BooksAPI from "./BooksAPI";
-import Books from "./Books";
+import Book from "./Book";
 
-class Search extends React.Component {
+class SearchPage extends React.Component {
   state = {
     query: "",
     result: [],
@@ -56,7 +56,7 @@ class Search extends React.Component {
                 const bookShelf = findBook ? findBook.shelf : "none";
                 return (
                   <li key={bookItem.id}>
-                    <Books
+                    <Book
                       shelfValue={bookShelf}
                       updateShelf={this.props.updateShelf}
                       book={bookItem}
@@ -78,4 +78,4 @@ class Search extends React.Component {
   }
 }
 
-export default Search;
+export default SearchPage;
