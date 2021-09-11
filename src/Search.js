@@ -28,10 +28,10 @@ export const LIST_OPTIONS = [
     value: "none",
     label: "None",
   },
-]; 
+];
 
 export const TERMS = [
-  "Alef",
+ "Alef",
   "Aluba",
   "Albama",
   "Alicom",
@@ -97,14 +97,7 @@ class Search extends Component {
             </button>
           </Link>
           <div className="search-books-input-wrapper">
-            {/*
-              NOTES: The search from BooksAPI is limited to a particular set of search terms.
-              You can find these search terms here:
-              https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-              However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-              you don't find a specific author or title. Every search is limited by search terms.
-            */}
+            
             <input
               type="text"
               placeholder="Search by title or author"
@@ -171,12 +164,12 @@ class Search extends Component {
                 );
               })}
             {query === "" && (
-              <li>Search</li>
+              <li> Search</li>
             )}
             {isQuerieValide && result.length === 0 && query.length > 0 && (
-              <li> No results</li>
+              <li> No result</li>
             )}
-            {!isQuerieValide && query !== "" && <li> No Data</li>}
+            {!isQuerieValide && query !== "" && <li> No data</li>}
           </ol>
         </div>
       </div>
