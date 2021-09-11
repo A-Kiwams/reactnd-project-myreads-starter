@@ -28,7 +28,7 @@ export const LIST_OPTIONS = [
     value: "none",
     label: "None",
   },
-];
+]; 
 
 export const TERMS = [
   "Alef",
